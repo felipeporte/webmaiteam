@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pago Mensualidad-Zoom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #eaeaea, #fddde6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+        }
+
+        h1 {
+            color: #d63384;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: #d63384;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #c2176b;
+            transform: scale(1.03);
+        }
+
+        .button .icon {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .button.active .icon {
+            transform: rotate(180deg);
+        }
+
+        .option-box {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.3s ease;
+            background: #ffe2ec;
+            border: 2px dashed #d63384;
+            border-radius: 15px;
+            margin-top: 0.5rem;
+        }
+
+        .option-box.active {
+            padding: 1rem;
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .option-box a {
+            display: block;
+            background: #f073a9;
+            color: white;
+            text-decoration: none;
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .option-box a:hover {
+            background: #e04084;
+        }
+
+        #mensaje {
+            margin-top: 1rem;
+            color: #ff2e63;
+            font-weight: bold;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        #mensaje.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .spinner {
+            display: none;
+            margin-top: 1rem;
+            width: 30px;
+            height: 30px;
+            border: 4px solid #d63384;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .spinner.visible {
+            display: block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .button,
+            .option-box a {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="mainContainer">
+        <img src="logo.png" alt="Logo" class="logo" />
+        <h1>Selecciona entrenadora <i class="far fa-smile"></i></h1>
+
+        <!-- Maite -->
+        <div class="button" id="btnMaite">
+            <i class="fas fa-credit-card"></i> Maite Flores
+            <i class="fas fa-chevron-down icon" id="iconMaite"></i>
+        </div>
+        <div class="option-box" id="boxMaite">
+            <a href="#" onclick="redirigir('https://pay.linkify.cl/pay/Y47QM3L9A6m5g9y/item/wvlxL3xAV1m20qn')">💳 Pago
+                Zoom</a>
+            <a href="#" onclick="redirigir('https://pay.linkify.cl/pay/Y47QM3L9A6m5g9y/item/P6YZL3ZBvw3NkjQ')">🛼 Pago
+                Flex</a>
+            <a href="#" onclick="redirigir('https://pay.linkify.cl/pay/Y47QM3L9A6m5g9y/item/P6YZL3ZBvw3NkjQ')">🧚🏻‍♀️
+                Pago Coreografia</a>
+        </div>
+
+        <!-- Maira -->
+        <div class="button" id="btnMaira">
+            <i class="fas fa-credit-card"></i> Maira Flores
+            <i class="fas fa-chevron-down icon" id="iconMaira"></i>
+        </div>
+        <div class="option-box" id="boxMaira">
+            <a href="#" onclick="redirigir('https://app.linkify.cl/pay/nYA71O6QMoKxX0V/item/LloWPOzV2kOaVDJ')">💳
+                Zoom
+                Clásica</a>
+            <a href="#" onclick="redirigir('https://app.linkify.cl/pay/nYA71O6QMoKxX0V/item/oMqyxOD9P53rb6Q')">🛼
+              Mallas</a>
+        </div>
+
+        <div id="mensaje"></div>
+        <div class="spinner" id="spinner"></div>
+    </div>
+
+    <script>
+        const boxMaite = document.getElementById('boxMaite');
+    const boxMaira = document.getElementById('boxMaira');
+    const mensaje = document.getElementById('mensaje');
+    const spinner = document.getElementById('spinner');
+    const mainContainer = document.getElementById('mainContainer');
+    const iconMaite = document.getElementById('iconMaite');
+    const iconMaira = document.getElementById('iconMaira');
+    const btnMaite = document.getElementById('btnMaite');
+    const btnMaira = document.getElementById('btnMaira');
+
+    btnMaite.addEventListener('click', () => {
+      const isVisible = boxMaite.classList.contains('active');
+      boxMaite.classList.toggle('active', !isVisible);
+      iconMaite.classList.toggle('rotate', !isVisible);
+      btnMaite.classList.toggle('active', !isVisible);
+
+      // Cierra Maira si está abierta
+      boxMaira.classList.remove('active');
+      iconMaira.classList.remove('rotate');
+      btnMaira.classList.remove('active');
+
+      mensaje.textContent = !isVisible ? "Selecciona una modalidad de pago para Maite." : "";
+      mensaje.classList.toggle('visible', !isVisible);
+      spinner.classList.remove('visible');
+    });
+
+    btnMaira.addEventListener('click', () => {
+      const isVisible = boxMaira.classList.contains('active');
+      boxMaira.classList.toggle('active', !isVisible);
+      iconMaira.classList.toggle('rotate', !isVisible);
+      btnMaira.classList.toggle('active', !isVisible);
+
+      // Cierra Maite si está abierta
+      boxMaite.classList.remove('active');
+      iconMaite.classList.remove('rotate');
+      btnMaite.classList.remove('active');
+
+      mensaje.textContent = !isVisible ? "Selecciona una modalidad de pago para Maira." : "";
+      mensaje.classList.toggle('visible', !isVisible);
+      spinner.classList.remove('visible');
+    });
+
+    function redirigir(url) {
+      mensaje.textContent = "Te estamos reenviando al portal de pago :)";
+      mensaje.classList.add('visible');
+      spinner.classList.add('visible');
+      boxMaite.classList.remove('active');
+      boxMaira.classList.remove('active');
+      btnMaite.classList.remove('active');
+      btnMaira.classList.remove('active');
+      iconMaite.classList.remove('rotate');
+      iconMaira.classList.remove('rotate');
+      setTimeout(() => {
+        window.location.href = url;
+      }, 2000);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!mainContainer.contains(e.target)) {
+        boxMaite.classList.remove('active');
+        boxMaira.classList.remove('active');
+        btnMaite.classList.remove('active');
+        btnMaira.classList.remove('active');
+        iconMaite.classList.remove('rotate');
+        iconMaira.classList.remove('rotate');
+        mensaje.classList.remove('visible');
+        spinner.classList.remove('visible');
+      }
+    });
+    </script>
+</body>
+
+</html>
